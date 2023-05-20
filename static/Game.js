@@ -15,7 +15,7 @@ let type = ""
 let numLocs = 10;
 let map = null;
 let marker = null;
-const API_KEY = "AIzaSyAtPxK2aqnMaZZPWg9E9Fo5olhjX8G-aLE" // hide this dummy - although it is ip bound so 'hopefully' can't be abused - pls be nice :)
+const API_KEY = "AIzaSyAtPxK2aqnMaZZPWg9E9Fo5olhjX8G-aLE" // hide this dummy - although it is website bound so 'hopefully' can't be abused - pls be nice :)
 
 var startLoc = window.prompt("Enter start location: (eg home town)");
 var searchQuery = window.prompt("Enter thing to search for: (eg pubs)");
