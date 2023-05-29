@@ -259,7 +259,7 @@ function draw() {
       reset();
       return;
     }
-    print("resetTimer: " + resetTimer);
+    //print("resetTimer: " + resetTimer);
     resetTimer++;
   }
 }
