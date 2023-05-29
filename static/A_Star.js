@@ -15,6 +15,9 @@ var cCoords = [[20,2], [20,3], [20,4], [20,5], [20,6], [21,2], [21,6], [22,2], [
 var oCoords = [[26,2], [26,3], [26,4], [26,5], [26,6], [27,2], [27,6], [28,2], [28,6], [29,2], [29,6], [30,2], [30,4], [30,5], [30,6]];
 var mCoords = [[32,2], [32,3], [32,4], [32,5], [32,6], [33,3], [34,4], [35,3], [36,2], [36,3], [36,4], [36,5], [36,6]];
 var e2Coords = [[38,2], [38,3], [38,4], [38,5], [38,6], [39,2], [39,4], [39,6], [40,2], [40,4], [40,6], [41,2], [41,4], [41,6], [42,2], [42,6]];
+var resetTimer = 0;
+var resetToggle = false;
+var resetTime = 60;
 
 class Node {
   constructor(x, y, f, g, cameFrom, obs) {
@@ -46,6 +49,8 @@ function reset() {
   oCoords = [[26,2], [26,3], [26,4], [26,5], [26,6], [27,2], [27,6], [28,2], [28,6], [29,2], [29,6], [30,2], [30,4], [30,5], [30,6]];
   mCoords = [[32,2], [32,3], [32,4], [32,5], [32,6], [33,3], [33,4], [34,4], [34,5], [35,3], [35,4], [36,2], [36,3], [36,4], [36,5], [36,6]];
   e2Coords = [[38,2], [38,3], [38,4], [38,5], [38,6], [39,2], [39,4], [39,6], [40,2], [40,4], [40,6], [41,2], [41,4], [41,6], [42,2], [42,6]];
+  resetToggle = false;
+  resetTimer = 0;
   loop();
   setup();
 }
@@ -154,52 +159,27 @@ function setup() {
 
 function draw() {
   //background(100);
-  for (let y = 0; y < gridHeight; y++) {
-    for (let x = 0; x < gridWidth; x++) {
-      cur = grid[x][y]
-      if (cur.obstacle) {
-        fill(0, 0, 255);
-        stroke(0, 0, 255);
-      } else if (cur == start) {
-        fill(0, 255, 0);
-        stroke(0, 255, 0);
-      } else if (cur == goal) {
-        fill(255, 0, 0);
-        stroke(255, 0, 0);
-      } else {
-        fill(0);
-        stroke(0);
+  if (!resetToggle) {
+    for (let y = 0; y < gridHeight; y++) {
+      for (let x = 0; x < gridWidth; x++) {
+        cur = grid[x][y]
+        if (cur.obstacle) {
+          fill(0, 0, 255);
+          stroke(0, 0, 255);
+        } else if (cur == start) {
+          fill(0, 255, 0);
+          stroke(0, 255, 0);
+        } else if (cur == goal) {
+          fill(255, 0, 0);
+          stroke(255, 0, 0);
+        } else {
+          fill(0);
+          stroke(0);
+        }
+        //circle((x*mult)+offset, (y*mult)+offset, 10);
       }
-      //circle((x*mult)+offset, (y*mult)+offset, 10);
     }
-  }
-  if (path.length > 0) {
-    oldX = path[0][0];
-    oldY = path[0][1];
-    for (let i = 0; i < path.length; i++) {
-      curX = path[i][0];
-      curY = path[i][1];
-      //print("(" + path[i][0] + ", " + path[i][1] + ")");
-      strokeWeight(5);
-      stroke(255, 165, 0);
-      line((oldX*mult)+offset, (oldY*mult)+offset, (curX*mult)+offset, (curY*mult)+offset);
-      oldX = curX;
-      oldY = curY;
-    }
-  }
-  
-  
-  if (nodes.length>0) {
-    current = lowestFScore(nodes);
-    if (current == goal) {
-      //textSize(32);
-      //fill(0);
-      //textAlign(LEFT, TOP);
-      //stroke(0);
-      //strokeWeight(1);
-      //text("DONE", 0, 0);
-      //print("Found a path to the goal node!");
-      path = reconstructPath(current);
+    if (path.length > 0) {
       oldX = path[0][0];
       oldY = path[0][1];
       for (let i = 0; i < path.length; i++) {
@@ -207,44 +187,80 @@ function draw() {
         curY = path[i][1];
         //print("(" + path[i][0] + ", " + path[i][1] + ")");
         strokeWeight(5);
-        stroke(0, 255, 0);
+        stroke(255, 165, 0);
         line((oldX*mult)+offset, (oldY*mult)+offset, (curX*mult)+offset, (curY*mult)+offset);
         oldX = curX;
         oldY = curY;
       }
-      //noLoop();
-      sleep(1000).then(function() {
-        reset();
-      })
-      return
     }
-    index = nodes.indexOf(current);
-    nodes.splice(index, 1);
     
-    for (let i = 0; i < current.neighbours.length; i++) {
-      path = []
-      neighbour = current.neighbours[i]
-      testG = current.g + distance(current, neighbour);
-      if (testG < neighbour.g) {
-        neighbour.cameFrom = current;
-        neighbour.g = testG;
-        neighbour.f = testG + h(neighbour);
-        if (nodes.indexOf(neighbour)==-1) {
-          nodes.push(neighbour);
-        }
+    
+    if (nodes.length>0) {
+      current = lowestFScore(nodes);
+      if (current == goal) {
+        //textSize(32);
+        //fill(0);
+        //textAlign(LEFT, TOP);
+        //stroke(0);
+        //strokeWeight(1);
+        //text("DONE", 0, 0);
+        //print("Found a path to the goal node!");
         path = reconstructPath(current);
+        oldX = path[0][0];
+        oldY = path[0][1];
+        for (let i = 0; i < path.length; i++) {
+          curX = path[i][0];
+          curY = path[i][1];
+          //print("(" + path[i][0] + ", " + path[i][1] + ")");
+          strokeWeight(5);
+          stroke(0, 255, 0);
+          line((oldX*mult)+offset, (oldY*mult)+offset, (curX*mult)+offset, (curY*mult)+offset);
+          oldX = curX;
+          oldY = curY;
+        }
+        //noLoop();
+        //sleep(1000).then(function() {
+        resetToggle = true;
+        //reset(); // Finished so reset
+        //})
+        return
       }
+      index = nodes.indexOf(current);
+      nodes.splice(index, 1);
+      
+      for (let i = 0; i < current.neighbours.length; i++) {
+        path = []
+        neighbour = current.neighbours[i]
+        testG = current.g + distance(current, neighbour);
+        if (testG < neighbour.g) {
+          neighbour.cameFrom = current;
+          neighbour.g = testG;
+          neighbour.f = testG + h(neighbour);
+          if (nodes.indexOf(neighbour)==-1) {
+            nodes.push(neighbour);
+          }
+          path = reconstructPath(current);
+        }
+      }
+    } else {
+      //sleep(1000).then(function() {
+        resetToggle = true;
+      //reset(); // Finished so reset
+      //})
+      //textSize(32);
+      //fill(0);
+      //textAlign(LEFT, TOP);
+      //stroke(0);
+      //text("FAIL", 0, 0);
+      //noLoop();
     }
-  } else {
-    sleep(1000).then(function() {
+  } else { // If in reset phase
+    if (resetTimer == resetTime) {
       reset();
-    })
-    //textSize(32);
-    //fill(0);
-    //textAlign(LEFT, TOP);
-    //stroke(0);
-    //text("FAIL", 0, 0);
-    //noLoop();
+      return;
+    }
+    print("resetTimer: " + resetTimer);
+    resetTimer++;
   }
 }
 
