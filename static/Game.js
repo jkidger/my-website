@@ -46,12 +46,12 @@ function addGuess(latLng) {
   });
   
   guesses.push(newGuess); // add marker
-  print("Added new marker at: " + latLng);
-  printGuesses();
+  //print("Added new marker at: " + latLng);
+  //printGuesses();
   
   result = checkGuess(latLng);
   if (result != null) {
-    print("location found! location: " + result);
+    //print("location found! location: " + result);
     found.push(result);
     
     //print("printing found list:");
@@ -74,10 +74,10 @@ function removeGuess(latLng) {
       break;
     }
   }
-  print("the index is: " + index);
+  //print("the index is: " + index);
   guesses[index].setMap(null);
   guesses.splice(index,1);
-  printGuesses();
+  //printGuesses();
 }
 
 function printGuesses() {
@@ -147,12 +147,12 @@ function findPlace() {
 
 function findPlaceCallback(result, status) {
   if (status == google.maps.places.PlacesServiceStatus.OK) {
-    print("printing search result!")
-    print(result[0]);
+    //print("printing search result!")
+    //print(result[0]);
     startLat = result[0].geometry.location.lat()
     startLong = result[0].geometry.location.lng()
-    print("lat: " + startLat);
-    print("long: " + startLong);
+    //print("lat: " + startLat);
+    //print("long: " + startLong);
     start = { lat: startLat, lng: startLong };
     map.setCenter(start);
     marker.setPosition(start);
@@ -188,7 +188,7 @@ function genLocationText() {
   for (let i = 0; i < locations.length; i++) {
     aaa = locations[i];
     if (contains(found, aaa)) {
-      print(aaa[0] + " has been found! striking it now");
+      //print(aaa[0] + " has been found! striking it now");
       loc = loc + "\n" + "---" + locations[i][0] + "---";
     } else {
       loc = loc + "\n" + locations[i][0];
@@ -232,9 +232,9 @@ function setup() {
   setTimeout(() => {
     search(radius);
     setTimeout(() => {
-      print("printing locations array")
+      //print("printing locations array")
       for (let i = 0; i < locations.length; i++) {
-        print(locations[i][0] + " " + locations[i][1] + "  " + locations[i][2]);
+        //print(locations[i][0] + " " + locations[i][1] + "  " + locations[i][2]);
       }
       createCanvas(800,320);
       window.initMap = initMap; // initialize map
@@ -244,7 +244,7 @@ function setup() {
 }
 
 function draw() {
-  print(timer);
+  //print(timer);
   background(220);
   if (timer > 0 && found.length < locations.length) {
     locationText = genLocationText();
