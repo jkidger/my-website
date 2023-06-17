@@ -4,8 +4,6 @@ let found = [];
 let guesses = [];
 let timer = -99;
 let TIME_LIMIT = 120;
-//let startLat = 51.453;
-//let startLong = -2.498;
 let startLat = 0;
 let startLong = 0;
 let start = { lat: startLat, lng: startLong }; // Start location
@@ -15,7 +13,6 @@ let type = ""
 let numLocs = 10;
 let map = null;
 let marker = null;
-const API_KEY = "AIzaSyAtPxK2aqnMaZZPWg9E9Fo5olhjX8G-aLE" // hide this dummy - although it is website bound so 'hopefully' can't be abused - pls be nice :)
 
 var startLoc = window.prompt("Enter start location: (eg home town)");
 var searchQuery = window.prompt("Enter thing to search for: (eg pubs)");
