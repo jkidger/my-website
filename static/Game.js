@@ -274,7 +274,7 @@ function draw() {
       timer = - 2;
     }
   } else if (timer == -99) {
-    print("waiting to start...");
+    //print("waiting to start...");
   } else if (timer == -2) {
     numMissed = locations.length - found.length;
     missedLocs = getMissed();
